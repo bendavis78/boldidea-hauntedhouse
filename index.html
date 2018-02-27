@@ -1,25 +1,79 @@
-<body></body>
+<html><link rel="stylesheet" type="text/css" href="css/style.css"><head></head>
+<body>
+	
+<!-- Include other libraries here (keep three.js at the top): -->
 <script src="js/Three.js"></script>
-<script src="js/ChromeFixes.js"></script>
+<script type="text/javascript" src="js/OrbitControls.js"></script>
+
 <script>
-	/* global THREE */
-	// This is where stuff in our game will happen:
-	var scene = new THREE.Scene();
-	
-	// This is what sees the stuff:
-	var aspect_ratio = window.innerWidth / window.innerHeight;
-	var camera = new THREE.PerspectiveCamera(75, aspect_ratio, 1, 10000);
-	camera.position.z = 500;
-	scene.add(camera);
-	
-	// This will draw what the camera sees onto the screen:
-	var renderer = new THREE.CanvasRenderer();
-	renderer.setSize(window.innerWidth, window.innerHeight);
-	document.body.appendChild(renderer.domElement);
-	
-	// ******** START CODING ON THE NEXT LINE ********
-	
-	
-	// Now, show what the camera sees on the screen:
-	renderer.render(scene, camera);
+
+// Add variables that are defined in other libraries below to avoid warnings:
+/* global THREE, Scoreboard */
+
+// ****** START CODING HERE! ****** 
+// Set our width and height
+var width = window.innerWidth, height = window.innerHeight;
+// Create your scene.
+var scene = new THREE.Scene();
+// Set up the camera
+var camera = new THREE.PerspectiveCamera(70, width/height);
+var controls = new THREE.OrbitControls(camera);
+controls.target.set(0, -25, 0);
+camera.position.set(0, -24, -20);
+
+// Set up the renderer
+var renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setSize(width, height);
+renderer.shadowMap.enabled = true;
+document.body.appendChild(renderer.domElement);
+// *** ADD 3D OBJECTS TO YOUR SCENE HERE ***
+function animate() {
+ // Use this function to animate your objects.
+ // This function runs over 60 times per second!
+ // *** ANIMATE YOUR 3D OBJECTS HERE ****
+ renderer.render(scene, camera);
+ requestAnimationFrame(animate);
+ 
+ controls.update();
+}
+
+
+animate();
+var floor = new THREE.MeshPhongMaterial ({
+ map: THREE.ImageUtils.loadTexture('images/carpet.jpg'),
+ side:THREE.BackSide
+});
+var wallpaper = new THREE.MeshPhongMaterial ({
+ map: THREE.ImageUtils.loadTexture('images/wallpapaer.jpg'),
+  side:THREE.BackSide
+
+});
+
+var shape = new THREE.CubeGeometry (50,50,50);
+var cover = new THREE.MeshFaceMaterial([wallpaper, wallpaper, wallpaper,floor, wallpaper, wallpaper]);
+var box = new THREE.Mesh (shape, cover);
+
+scene.add(box);
+
+var loader = new THREE.ObjectLoader();
+var testObj;
+
+loader.load("models/arm-chair/arm-chair.json",function ( obj ) {
+   testObj = obj;
+   scene.add( obj );
+   obj.position.set(0,-25,0);
+   camera.lookAt(obj);
+});
+
+var light = new THREE.PointLight(0xf7f59e, 3, 50, 1.5);
+light.position.set(0,0,0)
+scene.add(light);
+
+
+var light = new THREE.PointLight(0xf7f59e, 1, 10, 1.5);
+light.position.set(0,-20,0)
+scene.add(light);
+
+
 </script>
+</body></html>
