@@ -1,79 +1,75 @@
-<html><link rel="stylesheet" type="text/css" href="css/style.css"><head></head>
+<html>
+
+<head>
+ <link rel="stylesheet" type="text/css" href="css/style.css">
+ <link rel="stylesheet" type="text/css" href="css/controls.css">
+</head>
+
 <body>
-	
-<!-- Include other libraries here (keep three.js at the top): -->
-<script src="js/Three.js"></script>
-<script type="text/javascript" src="js/OrbitControls.js"></script>
+ <div id="blocker">
 
-<script>
+  <div id="instructions">
+   <span style="font-size:40px">Click to play</span>
+<br /> (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+  </div>
 
-// Add variables that are defined in other libraries below to avoid warnings:
-/* global THREE, Scoreboard */
+ </div>
 
-// ****** START CODING HERE! ****** 
-// Set our width and height
-var width = window.innerWidth, height = window.innerHeight;
-// Create your scene.
-var scene = new THREE.Scene();
-// Set up the camera
-var camera = new THREE.PerspectiveCamera(70, width/height);
-var controls = new THREE.OrbitControls(camera);
-controls.target.set(0, -25, 0);
-camera.position.set(0, -24, -20);
+ <!-- Include other libraries here (keep three.js at the top): -->
+ <script src="js/Three.js"></script>
+ <script src="js/OrbitControls.js"></script>
+ <script src="js/Door.js"></script>
+ <script src="js/Tween.js"></script>
+ <script src="js/Collisions.js"></script>
+ <script src="js/controls.js"></script>
+ <script src="js/PointerLockControls.js"></script>
+ <script src="js/FlashLight.js"></script>
+ <script src="js/room1.js"></script>
+ <script>
+  // Add variables that are defined in other libraries below to avoid warnings:
+  /* global THREE, TWEEN, makeDoor, openDoor, setUpControls,updateControls */
+  /* global setContainerObject setRigidObject, setPassageObject */
+  /* global unsetContainerObject unsetRigidObject, unsetPassageObject */
+  /* global makeRoomOne */
 
-// Set up the renderer
-var renderer = new THREE.WebGLRenderer({antialias: true});
-renderer.setSize(width, height);
-renderer.shadowMap.enabled = true;
-document.body.appendChild(renderer.domElement);
-// *** ADD 3D OBJECTS TO YOUR SCENE HERE ***
-function animate() {
- // Use this function to animate your objects.
- // This function runs over 60 times per second!
- // *** ANIMATE YOUR 3D OBJECTS HERE ****
- renderer.render(scene, camera);
- requestAnimationFrame(animate);
+  // ****** START CODING HERE! ****** 
+  // Set our width and height
+  var width = window.innerWidth,
+   height = window.innerHeight;
+  // Create your scene.
+  var scene = new THREE.Scene();
+  // Set up the camera
+  var camera = new THREE.PerspectiveCamera(70, width / height);
+  setUpControls(camera);
+  camera.position.set(0, 0, 0);
+  
+  var player = controls.getObject();
  
- controls.update();
-}
+  // Set up the renderer
+  var renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(width, height);
+  renderer.shadowMap.enabled = true;
+  document.body.appendChild(renderer.domElement);
+  // *** ADD 3D OBJECTS TO YOUR SCENE HERE ***
+  function animate() {
+   // Use this function to animate your objects.
+   // This function runs over 60 times per second!
+   // *** ANIMATE YOUR 3D OBJECTS HERE ****
+   renderer.render(scene, camera);
+   requestAnimationFrame(animate);
+   CheckCollisions();
+   updateControls();
+   TWEEN.update();
+  }
 
 
-animate();
-var floor = new THREE.MeshPhongMaterial ({
- map: THREE.ImageUtils.loadTexture('images/carpet.jpg'),
- side:THREE.BackSide
-});
-var wallpaper = new THREE.MeshPhongMaterial ({
- map: THREE.ImageUtils.loadTexture('images/wallpapaer.jpg'),
-  side:THREE.BackSide
+  animate();
+  
 
-});
+ var room = makeRoomOne(0,0,0);
+ scene.add(room);
+  
+ </script>
+</body>
 
-var shape = new THREE.CubeGeometry (50,50,50);
-var cover = new THREE.MeshFaceMaterial([wallpaper, wallpaper, wallpaper,floor, wallpaper, wallpaper]);
-var box = new THREE.Mesh (shape, cover);
-
-scene.add(box);
-
-var loader = new THREE.ObjectLoader();
-var testObj;
-
-loader.load("models/arm-chair/arm-chair.json",function ( obj ) {
-   testObj = obj;
-   scene.add( obj );
-   obj.position.set(0,-25,0);
-   camera.lookAt(obj);
-});
-
-var light = new THREE.PointLight(0xf7f59e, 3, 50, 1.5);
-light.position.set(0,0,0)
-scene.add(light);
-
-
-var light = new THREE.PointLight(0xf7f59e, 1, 10, 1.5);
-light.position.set(0,-20,0)
-scene.add(light);
-
-
-</script>
-</body></html>
+</html>
