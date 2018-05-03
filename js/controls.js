@@ -74,9 +74,11 @@ function getCollisions(objects) {
     return intersects;
 }
 
-function setUpControls(camera) {
+function setUpControls(camera, player) {
     controls = new THREE.PointerLockControls(camera);
-    scene.add(controls.getObject());
+    controlObj = controls.getObject();
+    scene.add(controlObj);
+    controlObj.add(player);
     var blocker = document.getElementById('blocker');
     var instructions = document.getElementById('instructions');
     // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
@@ -177,25 +179,26 @@ function updateControls() {
         direction.normalize(); // this ensures consistent movements in all directions
         if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta;
         if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta;
+
+        var controlObj = controls.getObject();
         
-        var player = controls.getObject();
-        var prevPosition = player.position.clone();
+        var prevPosition = controlObj.position.clone();
         
-        player.translateX(velocity.x * delta);
-        player.translateY(velocity.y * delta);
-        player.translateZ(velocity.z * delta);
+        controlObj.translateX(velocity.x * delta);
+        controlObj.translateY(velocity.y * delta);
+        controlObj.translateZ(velocity.z * delta);
         
         var Ymin = -15;
-        if (player.position.y < Ymin) {    
+        if (controlObj.position.y < Ymin) {    
             velocity.y = 0;
-            player.position.y = Ymin;
+            controlObj.position.y = Ymin;
             canJump = true;
         }
         
         var canMove = true;
         
         // constrain movement within containers
-        if (containerObjects.length > 0 && !player.intersects(containerObjects)) {
+        if (containerObjects.length > 0 && !player.isContainedBy(containerObjects)) {
             canMove = false;
         }
         
@@ -206,14 +209,13 @@ function updateControls() {
         
         // passage objects override and allow us to move through anything
         if (player.intersects(passageObjects)) {
-            console.log('passage');
             canMove = true;
         }
         
         if (!canMove && collisionsEnabled) {
-            player.position.x = prevPosition.x;
-            player.position.y = prevPosition.y;
-            player.position.z = prevPosition.z;
+            controlObj.position.x = prevPosition.x;
+            controlObj.position.y = prevPosition.y;
+            controlObj.position.z = prevPosition.z;
         }
         
         prevTime = time;

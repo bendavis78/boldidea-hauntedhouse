@@ -1,6 +1,6 @@
 /* global THREE, TWEEN, scene */
 
-function makeDoor (x, y, z) {
+function makeDoor(x, y, z) {
     var material = new THREE.MeshPhongMaterial({
      map: new THREE.TextureLoader().load('images/door.jpg'),
     });
@@ -11,7 +11,6 @@ function makeDoor (x, y, z) {
     );
     var hinge = new THREE.Object3D();
     hinge.add(door);
-    scene.add (hinge);
     hinge.position.set (x, y, z);
     hinge.position.x = x+5
     door.position.x = -5

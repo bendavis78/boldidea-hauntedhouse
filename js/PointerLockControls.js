@@ -11,17 +11,14 @@ THREE.PointerLockControls = function ( camera, element ) {
 
 	camera.rotation.set( 0, 0, 0 );
 
+
 	var pitchObject = new THREE.Object3D();
 	pitchObject.add( camera );
 
-
-	 var player = new THREE.Mesh (
-	  new THREE.CubeGeometry(10,15,10),
-	  new THREE.MeshNormalMaterial()
-	 );
-	player.name = 'controls';
-	player.position.y = -20;
-	player.add( pitchObject );
+  var yawObject = new THREE.Object3D();
+	yawObject.name = 'controls';
+	yawObject.position.y = -20;
+	yawObject.add( pitchObject );
 
 	var PI_2 = Math.PI / 2;
 
@@ -32,7 +29,7 @@ THREE.PointerLockControls = function ( camera, element ) {
 		var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
-		player.rotation.y -= movementX * 0.002;
+		yawObject.rotation.y -= movementX * 0.002;
 		pitchObject.rotation.x -= movementY * 0.002;
 
 		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
@@ -50,16 +47,14 @@ THREE.PointerLockControls = function ( camera, element ) {
 	this.enabled = false;
 
 	this.getObject = function () {
-
-		return player;
-
+		return yawObject;
 	};
 
 	this.getDirection = function() {
 		// assumes the camera itself is not rotated
 		var direction = new THREE.Vector3( 0, 0, - 1 );
 		var rotation = new THREE.Euler( 0, 0, 0, "YXZ" );
-		rotation.set( pitchObject.rotation.x, player.rotation.y, 0 );
+		rotation.set( pitchObject.rotation.x, yawObject.rotation.y, 0 );
 		direction.applyEuler( rotation );
 		
 		return direction;

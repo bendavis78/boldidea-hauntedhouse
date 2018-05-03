@@ -24,6 +24,8 @@
  <script src="js/controls.js"></script>
  <script src="js/PointerLockControls.js"></script>
  <script src="js/FlashLight.js"></script>
+ <script src="js/OBJLoader.js"></script>
+ <script src="js/MTLLoader.js"></script>
  <script src="js/room1.js"></script>
  <script>
   // Add variables that are defined in other libraries below to avoid warnings:
@@ -40,34 +42,45 @@
   var scene = new THREE.Scene();
   // Set up the camera
   var camera = new THREE.PerspectiveCamera(70, width / height);
-  setUpControls(camera);
   camera.position.set(0, 0, 0);
   
-  var player = controls.getObject();
+  var playerMaterial = new THREE.MeshBasicMaterial();
+	var player = new THREE.Mesh (
+	 new THREE.CubeGeometry(5,15,5),
+	 new THREE.MeshNormalMaterial()
+	);
+  player.visible = false;
+  setUpControls(camera, player);
+
+  // give player a flashlight
+  var flashlight = makeFlashlight();
+  camera.add(flashlight);
+  //flashlight.turnOn();
  
   // Set up the renderer
   var renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(width, height);
   renderer.shadowMap.enabled = true;
   document.body.appendChild(renderer.domElement);
+
   // *** ADD 3D OBJECTS TO YOUR SCENE HERE ***
+
+  var room1 = makeRoomOne(0,0,0);
+  scene.add(room1);
+
   function animate() {
    // Use this function to animate your objects.
    // This function runs over 60 times per second!
    // *** ANIMATE YOUR 3D OBJECTS HERE ****
    renderer.render(scene, camera);
    requestAnimationFrame(animate);
-   CheckCollisions();
+   room1.update();
    updateControls();
    TWEEN.update();
   }
 
 
   animate();
-  
-
- var room = makeRoomOne(0,0,0);
- scene.add(room);
   
  </script>
 </body>
