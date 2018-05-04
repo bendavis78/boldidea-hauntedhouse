@@ -6,6 +6,9 @@
 function makeFlashlight() {
   var flashlight = new THREE.Object3D();
   flashlight.rotateX(Math.PI / 2);
+
+  // brightness is a number between 0 and 2
+  var brightness = 1;
   
   var spotLight = new THREE.SpotLight(0xf7f59e);
   spotLight.rotateX(Math.PI / 2);
@@ -23,11 +26,16 @@ function makeFlashlight() {
   flashlight.spotLight = spotLight;
 
   flashlight.turnOn = function() {
-    spotLight.intensity = 1;
+    // intensity is a number between 0 and 2
+    spotLight.intensity = brightness;
   }
 
   flashlight.turnOff = function() {
-    spotlight.intensity = 0;
+    spotLight.intensity = 0;
+  }
+
+  flashlight.isTurnedOn = function() {
+    return spotLight.intensity > 0;
   }
 
   return flashlight;

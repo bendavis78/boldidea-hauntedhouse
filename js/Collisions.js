@@ -121,4 +121,17 @@
     }
     return object.contains(this);
   }
+
+
+  /**
+   * Gets the distance between two objects in the global world matrix
+   *
+   * @param {Object3D} object An `Object3D` instance to check the distance to
+   * @returns {Number} the distance to the object
+   */
+  THREE.Object3D.prototype.distanceTo = function(object) {
+    var p1 = getWorldPosition(this);
+    var p2 = getWorldPosition(object);
+    return p1.distanceTo(p2);
+  };
 })();
