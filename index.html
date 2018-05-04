@@ -20,6 +20,7 @@
  <script src="js/OrbitControls.js"></script>
  <script src="js/Door.js"></script>
  <script src="js/Tween.js"></script>
+ <script src="js/Sounds.js"></script>
  <script src="js/Collisions.js"></script>
  <script src="js/controls.js"></script>
  <script src="js/PointerLockControls.js"></script>
@@ -55,7 +56,8 @@
   // give player a flashlight
   var flashlight = makeFlashlight();
   camera.add(flashlight);
-  //flashlight.turnOn();
+  // TODO: toggle the flashlight on and off using the f key
+
  
   // Set up the renderer
   var renderer = new THREE.WebGLRenderer({ antialias: true });

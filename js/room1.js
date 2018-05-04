@@ -65,7 +65,8 @@ function makeRoomOne (x, y, z) {
   instructions.position.set(0,-5,-23)
   room.add(instructions);
   
-  var light = new THREE.PointLight(0xf7f59e, 2, 50, 1.5);
+  // This light is intentionally dim so that the player can still vaguely see surroundings
+  var light = new THREE.PointLight(0xf7f59e, .25, 50, 1.5);
   light.position.set(0, 0, 0);
   room.add(light);
 
@@ -75,11 +76,11 @@ function makeRoomOne (x, y, z) {
   var door2 = makeDoor(-10, -15, 24);
   room.add(door2);
 
+  // This passage will allow us to move through the door once it's opened.
   var passage = new THREE.Mesh (
       new THREE.CubeGeometry (10,20,2),
       new THREE.MeshBasicMaterial({color:0x000000})
   );
-  //room.add(passage)
   room.passage = passage;
   passage.position.set(10,-15,25)
   setPassageObject(passage)
@@ -87,14 +88,17 @@ function makeRoomOne (x, y, z) {
   setContainerObject(room);
 
   room.update = function() {
+    // this gets called from the main animate() function
     if (room.key) {
       if (player.intersects(room.key)){
         console.log('You found the key!');
-        // TO DO: Player gets the key, then opens the door when close to it
-        //openDoor(door1);
-        //room.add(passage);
+        // TODO: Remove the key (remove from room object, and set room.key to null)
+        // TODO: play a sound to let the player know they got the key
       }
     }
+
+    // TODO: if player is close to the door and has the key, open the door using openDoor(door1)
+    //console.log(player.distanceTo(door1));
   }
 
   return room
