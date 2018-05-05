@@ -72,19 +72,12 @@ function makeRoomOne (x, y, z) {
 
   var door1 = makeDoor(10, -15, 24);
   room.add(door1);
+  room.door1 = door1;
 
   var door2 = makeDoor(-10, -15, 24);
   room.add(door2);
+  room.door2 = door2;
 
-  // This passage will allow us to move through the door once it's opened.
-  var passage = new THREE.Mesh (
-      new THREE.CubeGeometry (10,20,2),
-      new THREE.MeshBasicMaterial({color:0x000000})
-  );
-  room.passage = passage;
-  passage.position.set(10,-15,25)
-  setPassageObject(passage)
-      
   setContainerObject(room);
 
   room.update = function() {
