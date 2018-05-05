@@ -3,7 +3,7 @@
 /* global setContainerObject setRigidObject, setPassageObject */
 /* global unsetContainerObject unsetRigidObject, unsetPassageObject, player, room1 */
 
-function makeRoomOne (x, y, z) {
+function makeRoomOne() {
   var floor = new THREE.MeshPhongMaterial({
    map: new THREE.TextureLoader().load('images/carpet.jpg'),
    side: THREE.BackSide
